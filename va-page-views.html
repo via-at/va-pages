@@ -1,0 +1,94 @@
+<link rel="import" href="../iron-pages/iron-pages.html">
+<link rel="import" href="../app-route/app-route.html">
+<link rel="import" href="../app-route/app-location.html">
+<link rel="import" href="./va-load/va-redirect-behavior.html">
+<link rel="import" href="./va-load/va-load-behavior.html">
+
+<dom-module id="va-page-views">
+  
+  <template>
+    
+    <app-location route="{{route}}"></app-location>
+    
+    <app-route
+      route="{{route}}"
+      pattern="/[[page]]"
+      tail="{{subRoute}}"></app-route>
+    <app-route
+      route="{{subRoute}}"
+      pattern="/:view"
+      data="{{subRouteData}}"
+      tail="{{contentRoute}}"></app-route>
+    <app-route
+      route="{{contentRoute}}"
+      pattern="/:content"
+      data="{{contentRouteData}}"></app-route>
+      
+    <iron-pages id="selector">
+      <content></content>
+    </iron-pages>
+      
+  </template>
+  
+  <script>
+    Polymer({
+      
+      is: 'va-page-views',
+      
+      behaviors: [
+        VA.ViewLoadBehavior,
+        VA.RedirectBehavior
+      ],
+      
+      observers: [
+        '_viewChanged(subRouteData.view)',
+        '_contentChanged(contentRouteData.content)'
+      ],
+      
+      properties: {
+        
+        page: {
+          type: String
+        },
+        
+        defaultView: {
+          type: String
+        },
+        
+        view: {
+          type: String,
+          notify: true
+        },
+        
+        content: {
+          type: String,
+          notify: true
+        }
+      },
+      
+      _viewChanged: function (view) {
+        if (this.defaultView && (!view || view === '')) {
+          this.replaceLocation(this.page + '/' + this.defaultView);
+        } else {
+          var children = Polymer.dom(this).children;
+          var viewTagName = 'va-' + this.page + '-' + view;
+          
+          for (var i in children) {
+            if (children[i].tagName.toLowerCase() === viewTagName) {
+              this.$.selector.selectIndex(i);
+              break;
+            }
+          }
+          
+          this.view = view;
+        }
+      },
+      
+      _contentChanged: function (content) {
+        this.content = content;
+      }
+        
+    });
+  </script>
+  
+</dom-module>

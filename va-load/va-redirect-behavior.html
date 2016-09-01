@@ -1,0 +1,18 @@
+<script>
+  VA.RedirectBehavior = {
+    
+    changeLocation: function (path) {
+      history.pushState({}, '', path);
+      this._fire();
+    },
+    
+    replaceLocation: function (path) {
+      history.replaceState({}, '', path);
+      this._fire();
+    },
+    
+    _fire: function () {
+      Polymer.Base.fire('location-changed', {}, { node: window });
+    }
+  };
+</script>

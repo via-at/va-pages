@@ -1,0 +1,74 @@
+<dom-module id="va-load-error-overcover">
+  <template>
+    <style>
+      :host {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: white;
+        z-index: 9999;
+        background-image: url(/images/error.jpg);
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+      
+      div {
+        position: fixed;
+        width: 100%;
+        height: 100px;
+        bottom: 0;
+        text-align: center;
+        color: white;
+        font-size: 30px;
+        line-height: 100px;
+        font-weight: bold;
+        background-color: rgba(255, 255, 255, 0.5);
+      }
+      
+      img {
+        position: absolute;
+        top: 50px;
+        left: 50px;
+        width: 200px;
+      }
+    </style>
+    
+    <a href="/"><img src="/images/via-at-logo-top.svg"></a>
+    <div>This page doesn't exist!</div>
+  </template>
+  
+  <script>
+    Polymer({
+      
+      is: 'va-load-error-overcover',
+      
+      properties: {
+        opened: {
+          value: false,
+          type: Boolean,
+          observer: '_observer'
+        }
+      },
+      
+      open: function () {
+        this.opened = true;
+      },
+      
+      close: function () {
+        this.opened = false;
+      },
+      
+      _observer: function () {
+        if (this.opened) {
+          this.style.display = 'block';
+        } else {
+          this.style.display = 'none';
+        }
+      }
+      
+    })
+  </script>
+</dom-module>
