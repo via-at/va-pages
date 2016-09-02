@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "polymer": "Polymer/polymer#^1.6.1",
+    "va-load": "via-at/va-load",
+    "va-redirect-behavior": "via-at/va-redirect-behavior",
     "neon-animation": "PolymerElements/neon-animation#^1.2.3",
     "app-route": "PolymerElements/app-route",
     "iron-pages": "PolymerElements/iron-pages"
