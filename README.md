@@ -7,7 +7,7 @@
 This component requires initialization information like:
 
 ```js
-VA = {
+var VA = {
   prefix: 'my',      // Prefix of custom element name (e.g. <my-profile>)
   pageRoot: '/pages' // Root path of pages
 };
