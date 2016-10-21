@@ -1,6 +1,6 @@
 {
   "name": "va-pages",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "va-pages.html",
   "license": "MIT",
   "authors": [
@@ -11,10 +11,9 @@
     "url": "https://github.com/via-at/va-pages.git"
   },
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.6.1",
+    "polymer": "Polymer/polymer#^1.7.0",
     "va-load": "via-at/va-load",
     "va-redirect-behavior": "via-at/va-redirect-behavior",
-    "neon-animation": "PolymerElements/neon-animation#^1.2.3",
     "app-route": "PolymerElements/app-route",
     "iron-pages": "PolymerElements/iron-pages"
   },
