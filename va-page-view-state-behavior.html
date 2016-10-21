@@ -1,0 +1,50 @@
+<script>
+  (function () {
+
+    var currentPage, currentView;
+
+    VA.PageViewStateBehavior = {
+
+      setPage: function (page) {
+        currentPage = page;
+      },
+
+      entryPage: function () {
+        if (currentPage && currentPage.entry) {
+          currentPage.entry();
+        }
+      },
+
+      exitPage: function () {
+        this.exitView();
+
+        if (currentPage) {
+          if (currentPage.exit) {
+            currentPage.exit();
+          }
+          currentPage = null;
+        }
+      },
+
+      setView: function (view) {
+        currentView = view;
+      },
+
+      entryView: function () {
+        if (currentView && currentView.entry) {
+          currentView.entry();
+        }
+      },
+
+      exitView: function () {
+        if (currentView) {
+          if (currentView.exit) {
+            currentView.exit();
+          }
+          currentView = null;
+        }
+      }
+    };
+
+  }());
+</script>

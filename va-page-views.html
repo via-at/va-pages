@@ -3,27 +3,20 @@
 <link rel="import" href="../app-route/app-location.html">
 <link rel="import" href="../va-redirect-behavior/va-redirect-behavior.html">
 <link rel="import" href="../va-load/va-load-behavior.html">
+<link rel="import" href="./va-page-view-state-behavior.html">
 
 <dom-module id="va-page-views">
   
   <template>
     
     <app-location route="{{route}}"></app-location>
-    
+
     <app-route
       route="{{route}}"
-      pattern="/[[page]]"
-      tail="{{subRoute}}"></app-route>
-    <app-route
-      route="{{subRoute}}"
-      pattern="/:view"
-      data="{{subRouteData}}"
-      tail="{{contentRoute}}"></app-route>
-    <app-route
-      route="{{contentRoute}}"
-      pattern="/:content"
-      data="{{contentRouteData}}"></app-route>
-      
+      data="{{routeData}}"
+      query-params="{{queryParams}}"
+      pattern="/:page/:view"></app-route>
+
     <iron-pages id="selector">
       <content></content>
     </iron-pages>
@@ -31,64 +24,81 @@
   </template>
   
   <script>
-    Polymer({
-      
-      is: 'va-page-views',
-      
-      behaviors: [
-        VA.ViewLoadBehavior,
-        VA.RedirectBehavior
-      ],
-      
-      observers: [
-        '_viewChanged(subRouteData.view)',
-        '_contentChanged(contentRouteData.content)'
-      ],
-      
-      properties: {
-        
-        page: {
-          type: String
-        },
-        
-        defaultView: {
-          type: String
-        },
-        
-        view: {
-          type: String,
-          notify: true
-        },
-        
-        content: {
-          type: String,
-          notify: true
-        }
-      },
-      
-      _viewChanged: function (view) {
-        if (this.defaultView && (!view || view === '')) {
-          this.replaceLocation(this.page + '/' + this.defaultView);
-        } else {
-          var children = Polymer.dom(this).children;
-          var viewTagName = 'va-' + this.page + '-' + view;
-          
-          for (var i in children) {
-            if (children[i].tagName.toLowerCase() === viewTagName) {
-              this.$.selector.selectIndex(i);
-              break;
-            }
+
+    (function () {
+
+      Polymer({
+
+        is: 'va-page-views',
+
+        behaviors: [
+          VA.ViewLoadBehavior,
+          VA.RedirectBehavior,
+          VA.PageViewStateBehavior
+        ],
+
+        observers: [
+          '_viewChanged(routeData)'
+        ],
+
+        properties: {
+
+          page: {
+            type: String
+          },
+
+          defaultView: {
+            type: String
+          },
+
+          view: {
+            type: String,
+            notify: true
           }
-          
-          this.view = view;
+        },
+
+        _viewChanged: function (route) {
+          if (route.page !== this.page) return;
+
+          var children, viewTagName, target;
+          var view = route.view;
+
+          this.exitView();
+
+          if (this.defaultView && (!view || view === '')) {
+            this.replaceLocation(this.page + '/' + this.defaultView);
+          } else {
+            children = Polymer.dom(this).children;
+            viewTagName = 'va-' + this.page + '-' + view;
+
+            for (var i in children) {
+              target = children[i];
+
+              if (target.tagName.toLowerCase() === viewTagName) {
+                target.parameters = this.queryParams;
+
+                this.$.selector.selectIndex(i);
+
+                break;
+              }
+            }
+
+            this.setView(target);
+
+            this.entryView();
+
+            this.view = view;
+          }
+        },
+
+        htmlLoaded: function () {
+          // fallback
+          this.entryView();
         }
-      },
-      
-      _contentChanged: function (content) {
-        this.content = content;
-      }
-        
-    });
+
+      });
+
+    }());
   </script>
   
 </dom-module>
